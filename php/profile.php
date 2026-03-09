@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update MySQL
     $stmt = $mysqli->prepare("UPDATE users SET phone = ?, age = ?, dob = ?, gender = ?, city = ?, country = ?, bio = ?, signature = ?, updated_at = NOW() WHERE id = ?");
-    $stmt->bind_param("ssssssssi", $contact, $age, $dob, $gender, $city, $country, $bio, $signature, $userId);
+    $stmt->bind_param("ssssssssi", $phone, $age, $dob, $gender, $city, $country, $bio, $signature, $userId);
     
     if ($stmt->execute()) {
         echo json_encode([
