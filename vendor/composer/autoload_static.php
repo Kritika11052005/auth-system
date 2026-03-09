@@ -19,6 +19,8 @@ class ComposerStaticInit7c49052f26bb7ffda6ac481a3fdb36e5
         'P' =>
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
+            'Predis\\' => 7,
         ),
         'M' =>
         array (
@@ -34,6 +36,14 @@ class ComposerStaticInit7c49052f26bb7ffda6ac481a3fdb36e5
         'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Psr\\Http\\Message\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Predis\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/predis/predis/src',
         ),
         'MongoDB\\' =>
         array (

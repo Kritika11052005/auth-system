@@ -8,6 +8,6 @@
     ],
     "require": {
         "mongodb/mongodb": "^2.2",
-        "predis/predis": "^2.2"
+        "predis/predis": "^3.4"
     }
 }
