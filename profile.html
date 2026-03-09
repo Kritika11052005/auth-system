@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Organic Ink Auth</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 Grid -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <!-- Theme Flash Prevention -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <button id="theme-toggle" class="theme-toggle">🌿 Light</button>
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="container container-custom d-flex justify-content-between align-items-center py-4">
+            <div class="user-info d-flex align-items-center gap-4">
+                <div id="user-avatar" class="avatar">JD</div>
+                <div>
+                    <h2 id="display-name" class="m-0 h4" style="font-family: 'Outfit'; font-weight: 600;">Welcome back.</h2>
+                    <span id="display-username" class="mono text-muted small">@loading...</span>
+                </div>
+            </div>
+            <button id="logout-btn" class="btn-organic btn-ghost btn-sm" style="width: auto;">Exit Space</button>
+        </div>
+    </header>
+
+    <main class="container container-custom py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card-organic profile-card">
+                    <div class="header-group mb-5">
+                        <h1 class="m-0 h2">Your Profile</h1>
+                        <p class="text-muted">Manage your personal details and settings.</p>
+                    </div>
+
+                    <form id="profile-form">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" placeholder="john@example.com" disabled>
+                                    <small class="mono text-muted small" style="margin-top: 5px; display: block;">Email cannot be changed.</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth</label>
+                                    <input type="date" id="dob" name="dob">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <input type="number" id="age" name="age" placeholder="25">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" name="gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer_not_to_say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="bio">Short Bio</label>
+                                    <textarea id="bio" name="bio" rows="4" placeholder="Crafting digital spaces with intentional design..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-5">
+                            <div class="col-md-12">
+                                <label class="text-label mono small mb-3" style="display: block; letter-spacing: 0.1em; font-weight: 600;">PERSONAL SIGNATURE</label>
+                                <div class="signature-wrapper p-4" style="background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px; position: relative; overflow: hidden;">
+                                    <canvas id="signature-pad" style="width: 100%; height: 120px; cursor: crosshair;"></canvas>
+                                    <button type="button" id="clear-signature" class="mono small" style="position: absolute; bottom: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); cursor: pointer; text-decoration: underline;">Clear Input</button>
+                                </div>
+                                <input type="hidden" id="signature-data" name="signature">
+                                <p class="text-muted small mt-2">Sign above to authenticate your notebook changes.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-5 pt-4 border-top">
+                            <button type="submit" id="save-btn" class="btn-organic" style="width: auto; padding-left: 3rem; padding-right: 3rem;">Save Changes ✦</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-organic">
+        <div class="container text-center">
+            <p class="mono small mb-3">Made with intention by <span style="color: var(--primary-accent); font-weight: 600;">Kritika Benjwal</span></p>
+            <div class="footer-links">
+                <a href="https://github.com/Kritika11052005" target="_blank">Github</a>
+                <a href="https://www.linkedin.com/in/kritika-benjwal/" target="_blank">LinkedIn</a>
+                <a href="mailto:ananaya.benjwal@gmail.com">Email</a>
+            </div>
+            <p class="text-label small mt-4">© 2026 Organic Ink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ink_canvas.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

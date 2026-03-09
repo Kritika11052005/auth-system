@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Re-enter Space | Organic Ink Auth</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 Grid -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <!-- Theme Flash Prevention -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <button id="theme-toggle" class="theme-toggle">🌿 Light</button>
+
+    <div class="container container-custom min-vh-100 d-flex align-items-center justify-content-center py-5">
+        <div class="card-organic login-card">
+            <h1>Welcome back</h1>
+            <p class="text-muted mb-5">Re-enter the space of calm creativity.</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="identifier">Username or Email</label>
+                    <input type="text" id="identifier" name="identifier" placeholder="johndoe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                        <button type="button" id="password-toggle" class="password-toggle">👁</button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="remember">
+                        <span class="checkmark"></span>
+                        <span class="label-text">Remember me</span>
+                    </label>
+                    <a href="#" class="mono small-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" id="login-btn" class="btn-organic">Login to Dashboard ✦</button>
+            </form>
+
+            <div class="text-center mt-5 pt-4 border-top">
+                <p class="text-muted">First time here? <a href="register.html" class="mono" style="color: var(--primary-accent); text-decoration: none; font-weight: 600;">Begin Journey</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-organic">
+        <div class="container text-center">
+            <p class="mono small mb-3">Made with intention by <span style="color: var(--primary-accent); font-weight: 600;">Kritika Benjwal</span></p>
+            <div class="footer-links">
+                <a href="https://github.com/Kritika11052005" target="_blank">Github</a>
+                <a href="https://www.linkedin.com/in/kritika-benjwal/" target="_blank">LinkedIn</a>
+                <a href="mailto:ananaya.benjwal@gmail.com">Email</a>
+            </div>
+            <p class="text-label small mt-4">© 2026 Organic Ink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ink_canvas.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

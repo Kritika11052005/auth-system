@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organic Ink | Premium Auth System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 Grid -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <!-- Theme Flash Prevention -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: clamp(3.5rem, 12vw, 6.5rem);
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+        .hero-lead {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+        .cta-group {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .btn-large {
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <button id="theme-toggle" class="theme-toggle">🌿 Light</button>
+
+    <main class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Crafting digital spaces with intentional design.</h1>
+            <p class="hero-lead">An exceptionally beautiful, production-grade authentication system built around the grounded, calm, and typographically rich Organic Ink theme.</p>
+            
+            <div class="cta-group">
+                <a href="register.html" class="btn-organic btn-large">Begin Journey</a>
+                <a href="login.html" class="btn-organic btn-large btn-ghost">Re-enter Space</a>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="footer-organic">
+        <div class="container text-center">
+            <p class="mono small mb-3">Made with intention by <span style="color: var(--primary-accent); font-weight: 600;">Kritika Benjwal</span></p>
+            <div class="footer-links">
+                <a href="https://github.com/Kritika11052005" target="_blank">Github</a>
+                <a href="https://www.linkedin.com/in/kritika-benjwal/" target="_blank">LinkedIn</a>
+                <a href="mailto:ananaya.benjwal@gmail.com">Email</a>
+            </div>
+            <p class="text-label small mt-4">© 2026 Organic Ink. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        $(document).ready(function() {
+            if (Utils.isLoggedIn()) {
+                $('.cta-group').html(`
+                    <a href="profile.html" class="btn-organic btn-large">Go to Dashboard</a>
+                    <button id="main-logout" class="btn-organic btn-large btn-ghost">Exit Space</button>
+                `);
+                $('#main-logout').on('click', Utils.logout);
+            }
+        });
+    </script>
+</body>
+</html>

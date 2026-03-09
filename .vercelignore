@@ -1,0 +1,4 @@
+.env
+vendor/
+schema.sql
+README.md

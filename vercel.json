@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "php/*.php":             { "runtime": "vercel-php@0.9.0" },
+    "php/config/*.php":      { "runtime": "vercel-php@0.9.0" },
+    "php/middleware/*.php":  { "runtime": "vercel-php@0.9.0" }
+  },
+  "routes": [
+    { "src": "/php/(.*)", "dest": "/php/$1" },
+    { "src": "/(.*)",     "dest": "/$1"     }
+  ]
+}

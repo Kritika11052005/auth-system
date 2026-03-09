@@ -1,0 +1,97 @@
+/* Login Specific Styles */
+
+.login-card {
+    max-width: 450px;
+    width: 100%;
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    gap: 0.8rem;
+    margin: 0;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    height: 18px;
+    width: 18px;
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+    border-color: var(--primary-accent);
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.label-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.small-link {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.small-link:hover {
+    color: var(--primary-accent);
+}
+
+/* Staggered Animations */
+.login-card > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.login-card h1 { animation-delay: 0.1s; }
+.login-card p { animation-delay: 0.18s; }
+.login-card form { animation-delay: 0.26s; }
+.login-card .text-center { animation-delay: 0.34s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

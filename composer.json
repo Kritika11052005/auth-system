@@ -1,0 +1,12 @@
+{
+    "name": "hp/auth-system",
+    "authors": [
+        {
+            "name": "KRITIKA BENJWAL",
+            "email": "ananya.benjwal@gmail.com"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^2.2"
+    }
+}
