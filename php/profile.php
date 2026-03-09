@@ -5,6 +5,15 @@
 
 header('Content-Type: application/json');
 
+// Debug: Enable error reporting for this request
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Keep JSON clean, use logs if possible or return in response
+
+// Custom logger
+function debug_log($msg) {
+    file_put_contents(__DIR__ . '/debug.log', date('[Y-m-d H:i:s] ') . print_r($msg, true) . "\n", FILE_APPEND);
+}
+
 // Auth middleware check
 require_once __DIR__ . '/middleware/auth.php';
 $userId = authenticate();

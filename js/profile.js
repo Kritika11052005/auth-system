@@ -20,6 +20,7 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(response) {
+                console.log("Profile Data Raw:", response);
                 if (response.success) {
                     const data = response.data;
                     const account = data.account;
