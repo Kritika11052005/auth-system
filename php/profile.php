@@ -15,56 +15,51 @@ $mongo = require __DIR__ . '/config/db_mongo.php';
 $profileCollection = $mongo['collection'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // 1. Fetch account info from MySQL
-    $stmt = $mysqli->prepare("SELECT name, email, username FROM users WHERE id = ?");
+    // 1. Fetch EVERYTHING from MySQL (now the primary profile store for Vercel stability)
+    $stmt = $mysqli->prepare("SELECT name, email, username, phone, age, dob, gender, city, country, bio, signature, updated_at FROM users WHERE id = ?");
     $stmt->bind_param("i", $userId);
     $stmt->execute();
-    $user = $stmt->get_result()->fetch_assoc();
+    $userData = $stmt->get_result()->fetch_assoc();
     $stmt->close();
-
-    // 2. Fetch profile details from MongoDB
-    $profile = $profileCollection->findOne(['user_id' => (int)$userId]);
 
     echo json_encode([
         "success" => true,
         "data" => [
-            "account" => $user,
-            "profile" => $profile
+            "account" => [
+                "name" => $userData['name'],
+                "email" => $userData['email'],
+                "username" => $userData['username']
+            ],
+            "profile" => $userData // Includes all fields: age, dob, bio, etc.
         ]
     ]);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Upsert into MongoDB
-    $profileData = [
-        'user_id' => (int)$userId,
-        'age' => trim($_POST['age'] ?? ''),
-        'dob' => trim($_POST['dob'] ?? ''),
-        'contact' => trim($_POST['contact'] ?? ''),
-        'gender' => trim($_POST['gender'] ?? ''),
-        'city' => trim($_POST['city'] ?? ''),
-        'country' => trim($_POST['country'] ?? ''),
-        'bio' => trim($_POST['bio'] ?? ''),
-        'signature' => $_POST['signature'] ?? '',
-        'updated_at' => date('Y-m-d H:i:s')
-    ];
+    $age = trim($_POST['age'] ?? '');
+    $dob = trim($_POST['dob'] ?? '');
+    $contact = trim($_POST['contact'] ?? '');
+    $gender = trim($_POST['gender'] ?? '');
+    $city = trim($_POST['city'] ?? '');
+    $country = trim($_POST['country'] ?? '');
+    $bio = trim($_POST['bio'] ?? '');
+    $signature = $_POST['signature'] ?? '';
 
-    $result = $profileCollection->updateOne(
-        ['user_id' => (int)$userId],
-        ['$set' => $profileData],
-        ['upsert' => true]
-    );
-
-    if ($result->getUpsertedCount() > 0 || $result->getModifiedCount() >= 0) {
+    // Update MySQL
+    $stmt = $mysqli->prepare("UPDATE users SET phone = ?, age = ?, dob = ?, gender = ?, city = ?, country = ?, bio = ?, signature = ?, updated_at = NOW() WHERE id = ?");
+    $stmt->bind_param("ssssssssi", $contact, $age, $dob, $gender, $city, $country, $bio, $signature, $userId);
+    
+    if ($stmt->execute()) {
         echo json_encode([
             "success" => true,
             "message" => "Profile updated effectively",
-            "updated_at" => $profileData['updated_at']
+            "updated_at" => date('Y-m-d H:i:s')
         ]);
     } else {
-        echo json_encode(["success" => false, "message" => "No changes made or update failed"]);
+        echo json_encode(["success" => false, "message" => "Database update failed: " . $mysqli->error]);
     }
+    $stmt->close();
     exit;
 }
 
