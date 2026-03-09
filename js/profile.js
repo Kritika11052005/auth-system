@@ -72,8 +72,14 @@ $(document).ready(function() {
                     }
                 }
             },
-            error: function() {
-                Utils.showToast("Network error occurred", "error");
+            error: function(xhr) {
+                console.error("Profile load failed:", xhr.status, xhr.responseText);
+                if (xhr.status === 401) {
+                    Utils.showToast("Session expired. Please re-login.", "error");
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    Utils.showToast("Data sync error. Check console.", "error");
+                }
             }
         });
     }
