@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $age = trim($_POST['age'] ?? '');
     $dob = trim($_POST['dob'] ?? '');
-    $contact = trim($_POST['contact'] ?? '');
+    $phone = trim($_POST['phone'] ?? ''); // Changed from contact to phone
     $gender = trim($_POST['gender'] ?? '');
     $city = trim($_POST['city'] ?? '');
     $country = trim($_POST['country'] ?? '');

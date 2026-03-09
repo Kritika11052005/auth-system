@@ -45,8 +45,8 @@ $(document).ready(function() {
                         $('#signature-data').val(profile.signature);
                     }
                     
-                    // Profile details from MongoDB
-                    $('#contact').val(profile.contact || '');
+                    // Profile details from MySQL
+                    $('#phone').val(profile.phone || '');
                     $('#age').val(profile.age || '');
                     
                     if (profile.dob) {
