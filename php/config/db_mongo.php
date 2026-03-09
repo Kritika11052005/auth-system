@@ -67,7 +67,12 @@ $dbName = $_ENV['MONGO_DB'] ?? getenv('MONGO_DB') ?: 'guvi_intern';
 $collName = $_ENV['MONGO_COLL'] ?? getenv('MONGO_COLL') ?: 'profiles';
 
 try {
-    // Attempt real connection with short timeout to catch failures fast
+    // 2. Check if MongoDB extension exists
+    if (!extension_loaded('mongodb')) {
+        throw new RuntimeException("MongoDB extension not loaded.");
+    }
+
+    // Attempt real connection
     $client = new Client($rawUri, [
         'tls' => true,
         'tlsAllowInvalidCertificates' => true, 
@@ -79,7 +84,7 @@ try {
     $database = $client->selectDatabase($dbName);
     $collection = $database->selectCollection($collName);
 
-    // Verify connection with a ping. If it throws, we go to catch -> Mock
+    // Verify connection
     $database->command(['ping' => 1]);
 
     return [
@@ -89,14 +94,14 @@ try {
         'isMock' => false
     ];
 
-} catch (Exception $e) {
-    // Fallback to Mock for local development
+} catch (Throwable $t) {
+    // Fallback if extension missing or connection fails
     $mockCollection = new MongoDBMockCollection();
     return [
         'client' => null,
         'database' => null,
         'collection' => $mockCollection,
         'isMock' => true,
-        'error' => $e->getMessage()
+        'error' => $t->getMessage()
     ];
 }

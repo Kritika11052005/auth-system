@@ -8,82 +8,65 @@ define('REDIS_PASS', $_ENV['REDIS_PASS'] ?? getenv('REDIS_PASS') ?: 'G6Dmmh9dkCP
 define('SESSION_TTL', 86400);
 
 /**
- * Handle missing Redis extension gracefully for local development.
- * In a production environment like Vercel, the extension is typically pre-installed.
- * This mock uses a temporary file-based storage to allow session persistence across requests.
+ * Redis Handler
+ * 1. Try phpredis extension (fastest)
+ * 2. Try Predis (robust, works on Vercel)
+ * 3. Fallback to Local Mock (for local dev without Redis)
  */
-if (!class_exists('Redis')) {
-    class Redis {
-        public $isMock = true;
-        private $storageFile;
 
-        public function __construct() {
-            $this->storageFile = sys_get_temp_dir() . '/organic_ink_redis_mock.json';
-            if (!file_exists($this->storageFile)) {
-                @file_put_contents($this->storageFile, json_encode([]));
-            }
-        }
+$redis = null;
 
-        private function load() {
-            if (!file_exists($this->storageFile)) return [];
-            return json_decode(@file_get_contents($this->storageFile), true) ?: [];
+// Option 1: PHPRedis Extension
+if (extension_loaded('redis')) {
+    try {
+        $redis = new Redis();
+        if (@$redis->connect(REDIS_HOST, REDIS_PORT)) {
+            if (REDIS_PASS) @$redis->auth(REDIS_PASS);
+        } else {
+            $redis = null;
         }
-
-        private function save($data) {
-            @file_put_contents($this->storageFile, json_encode($data));
-        }
-
-        public function connect($h, $p) { return true; }
-        public function auth($p) { return true; }
-        
-        public function set($k, $v, $ttl = 86400) {
-            $data = $this->load();
-            $data[$k] = [
-                'value' => $v,
-                'expires' => time() + $ttl
-            ];
-            $this->save($data);
-            return true;
-        }
-
-        public function get($k) {
-            $data = $this->load();
-            if (isset($data[$k])) {
-                if ($data[$k]['expires'] > time()) {
-                    return $data[$k]['value'];
-                }
-                $this->del($k); // Cleanup expired
-            }
-            return false;
-        }
-
-        public function del($k) {
-            $data = $this->load();
-            unset($data[$k]);
-            $this->save($data);
-            return true;
-        }
-
-        public function exists($k) {
-            return $this->get($k) !== false;
-        }
-    }
+    } catch (Throwable $e) { $redis = null; }
 }
 
-$redis = new Redis();
-
-// Check if we are using the real Redis extension before attempting connection
-if (extension_loaded('redis') && !isset($redis->isMock)) {
+// Option 2: Predis (Composer package)
+if (!$redis && class_exists('Predis\Client')) {
     try {
-        if (!@$redis->connect(REDIS_HOST, REDIS_PORT)) {
-            // Connection failed but we have the instance
+        $redis = new Predis\Client([
+            'scheme' => 'tcp',
+            'host'   => REDIS_HOST,
+            'port'   => REDIS_PORT,
+            'password' => REDIS_PASS ?: null,
+            'timeout'  => 2.0
+        ]);
+        $redis->ping(); // Verify connection
+    } catch (Throwable $e) { $redis = null; }
+}
+
+// Option 3: Local File-Based Mock (Emergency fallback)
+if (!$redis) {
+    if (!class_exists('RedisLocalMock')) {
+        class RedisLocalMock {
+            public $isMock = true;
+            private $storageFile;
+            public function __construct() {
+                $this->storageFile = sys_get_temp_dir() . '/organic_ink_redis.json';
+                if (!file_exists($this->storageFile)) @file_put_contents($this->storageFile, json_encode([]));
+            }
+            private function load() { return json_decode(@file_get_contents($this->storageFile), true) ?: []; }
+            private function save($d) { @file_put_contents($this->storageFile, json_encode($d)); }
+            public function set($k, $v, $ttl = 86400) {
+                $d = $this->load(); $d[$k] = ['v' => $v, 'e' => time() + $ttl]; $this->save($d); return true;
+            }
+            public function get($k) {
+                $d = $this->load();
+                if (isset($d[$k]) && $d[$k]['e'] > time()) return $d[$k]['v'];
+                return false;
+            }
+            public function del($k) { $d = $this->load(); unset($d[$k]); $this->save($d); return true; }
+            public function exists($k) { return $this->get($k) !== false; }
         }
-        if (REDIS_PASS) {
-            @$redis->auth(REDIS_PASS);
-        }
-    } catch (Exception $e) {
-        // Silently catch connection errors in dev
     }
+    $redis = new RedisLocalMock();
 }
 
 return $redis;
