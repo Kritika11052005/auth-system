@@ -11,7 +11,10 @@ $mysqli = new mysqli($host, $user, $pass, $db, $port);
 if ($mysqli->connect_error) {
     die(json_encode([
         "success" => false,
-        "message" => "Database connection failed: " . $mysqli->connect_error
+        "message" => "DB Error: " . $mysqli->connect_error,
+        "host" => $host,
+        "user" => $user,
+        "db" => $db
     ]));
 }
 return $mysqli;
